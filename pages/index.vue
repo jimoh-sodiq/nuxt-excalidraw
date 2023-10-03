@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { useRefHistory } from "@vueuse/core";
 
+// next features:
+// build the popover for the hamburger
+// implement the canvas background color change
+// implement the help modal
+// 
+
 const newData = ref("");
 const { redo, undo } = useRefHistory(newData);
 </script>

@@ -7,10 +7,13 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "generate-pwa-assets": "pwa-assets-generator --preset minimal public/icon_dark.svg"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
+    "@vite-pwa/assets-generator": "^0.0.10",
+    "@vite-pwa/nuxt": "^0.1.1",
     "@vueuse/core": "^10.4.1",
     "@vueuse/nuxt": "^10.4.1",
     "nuxt": "^3.7.4",
