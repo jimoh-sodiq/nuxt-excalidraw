@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   modules: [
     "@nuxt/devtools",
     "@vueuse/nuxt",
@@ -10,6 +10,7 @@ export default defineNuxtConfig({
   ],
   ssr: false,
   pwa: {
+    registerType: 'autoUpdate',
     manifest: {
       name: "Nuxt Excalidraw",
       short_name: "NuxtCalidraw",
