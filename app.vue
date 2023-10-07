@@ -21,6 +21,11 @@ onMounted(() => {
   rc.value = rough.canvas(canvas.value);
 });
 
+enum EditorMode {
+  isDrawing = "isDrawing",
+  isMoving = "isMoving",
+}
+
 type ElementTypes = "rectangle" | "line";
 
 const renderedElements = ref<any>([]);
@@ -33,9 +38,33 @@ watch(renderedElements, () => {
   );
 });
 
-const startPoint = ref<{ x: number; y: number }>({ x: 0, y: 0 });
-const selectedShape = ref<ElementTypes>("line");
+const editorMode = ref<EditorMode>(EditorMode.isDrawing);
+
+const drawingTools = [
+  "text",
+  "eraser",
+  "pen",
+  "arrow",
+  "line",
+  "picture",
+  "diamond",
+  "circle",
+  "rectangle",
+];
+
+// const startPoint = ref<{ x: number; y: number }>({ x: 0, y: 0 });
+// const selectedShape = ref<ElementTypes>("line");
 const isDrawing = ref(false);
+
+// const mode = ref<EditorMode>(EditorMode.isDrawing);
+
+watchEffect(() => {
+  if (!drawingTools.includes(selectedElementType.value)) {
+    editorMode.value = EditorMode.isMoving;
+  } else {
+    editorMode.value = EditorMode.isDrawing;
+  }
+});
 
 function createElement(x1: number, y1: number, x2: number, y2: number) {
   let roughElement;
@@ -74,7 +103,9 @@ function createElement(x1: number, y1: number, x2: number, y2: number) {
 }
 
 function handleMouseDown(event: MouseEvent) {
-  isDrawing.value = true;
+  if (editorMode.value == EditorMode.isDrawing) {
+    isDrawing.value = true;
+  } else return;
   const element = createElement(
     event.clientX,
     event.clientY,
