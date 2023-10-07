@@ -1,4 +1,79 @@
 <script setup lang="ts">
+const emit = defineEmits();
+
+function isActive(compare: string) {
+  return seletedValue.value == compare;
+}
+
+const navBarItems = [
+  {
+    element: "",
+    name: "ic:outline-back-hand",
+    index: "hand",
+    title: "Hand(pannning tool) - H",
+  },
+  {
+    index: "1",
+    name: "mdi:cursor-default-outline",
+    element: "pointer",
+    title: "Hand(pannning tool) - H",
+  },
+  {
+    index: "2",
+    name: "ic:baseline-crop-square",
+    element: "rectangle",
+    title: "Hand(pannning tool) - H",
+  },
+  {
+    index: "3",
+    name: "ph:diamond-bold",
+    element: "diamond",
+    title: "Hand(pannning tool) - H",
+  },
+  {
+    index: "4",
+    name: "ic:outline-circle",
+    element: "circle",
+    title: "Hand(pannning tool) - H",
+  },
+  {
+    index: "5",
+    name: "ic:baseline-arrow-right-alt",
+    element: "arrow",
+    title: "Hand(pannning tool) - H",
+  },
+  {
+    index: "6",
+    name: "ic:baseline-horizontal-rule",
+    element: "line",
+    title: "Hand(pannning tool) - H",
+  },
+  {
+    index: "7",
+    name: "ic:baseline-mode-edit-outline",
+    element: "pen",
+    title: "Hand(pannning tool) - H",
+  },
+  {
+    index: "8",
+    name: "ic:baseline-format-color-text",
+    element: "text",
+    title: "Hand(pannning tool) - H",
+  },
+  {
+    index: "9",
+    name: "ic:baseline-photo",
+    element: "picture",
+    title: "Hand(pannning tool) - H",
+  },
+  {
+    index: "0",
+    name: "ic:round-cleaning-services",
+    element: "eraser",
+    title: "Hand(pannning tool) - H",
+  },
+];
+
 const items = [
   [
     {
@@ -47,6 +122,11 @@ const items = [
     },
   ],
 ];
+const seletedValue = ref("");
+
+watch(seletedValue, (old) => {
+  emit("changed", seletedValue.value);
+});
 </script>
 
 <template>
@@ -92,19 +172,13 @@ const items = [
     </UDropdown>
     <div class="bg-white rounded-xl p-1.5 text-gray-600 shadow space-x-2">
       <NavBarIconButton
-        title="Hand(pannning tool) - H"
-        name="ic:outline-back-hand"
+        :is-active="isActive(item.element)"
+        v-for="(item, i) in navBarItems"
+        :key="i"
+        @click="seletedValue = item.element"
+        :title="item.title"
+        :name="item.name"
       />
-      <NavBarIconButton index="1" name="mdi:cursor-default-outline" />
-      <NavBarIconButton index="2" name="ic:baseline-crop-square" />
-      <NavBarIconButton index="3" name="ph:diamond-bold" />
-      <NavBarIconButton index="4" name="ic:outline-circle" />
-      <NavBarIconButton index="5" name="ic:baseline-arrow-right-alt" />
-      <NavBarIconButton index="6" name="ic:baseline-horizontal-rule" />
-      <NavBarIconButton index="7" name="ic:baseline-mode-edit-outline" />
-      <NavBarIconButton index="8" name="ic:baseline-format-color-text" />
-      <NavBarIconButton index="9" name="ic:baseline-photo" />
-      <NavBarIconButton index="0" name="ic:round-cleaning-services" />
     </div>
 
     <NuxtLink
