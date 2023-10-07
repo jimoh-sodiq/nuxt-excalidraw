@@ -58,7 +58,11 @@ function createElement(x1: number, y1: number, x2: number, y2: number) {
       roughElement,
     };
   } else {
-    roughElement = generator.value.circle(x1, y1, y2 - y1 + (x2 - x1));
+    roughElement = generator.value.circle(
+      x1,
+      y1,
+      calculateDistance(x1, y1, x2, y2)
+    );
     return {
       x1,
       y1,
