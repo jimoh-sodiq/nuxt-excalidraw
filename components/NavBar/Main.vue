@@ -1,15 +1,19 @@
 <script setup lang="ts">
 const emit = defineEmits();
 
+const props = defineProps<{
+    currentSelection: string
+}>()
+
 function isActive(compare: string) {
-  return seletedValue.value == compare;
+  return selectedValue.value == compare;
 }
 
 const navBarItems = [
   {
-    element: "",
+    element: "hand",
     name: "ic:outline-back-hand",
-    index: "hand",
+    index: "",
     title: "Hand(pannning tool) - H",
   },
   {
@@ -122,11 +126,15 @@ const items = [
     },
   ],
 ];
-const seletedValue = ref("");
+const selectedValue = ref(props.currentSelection);
 
-watch(seletedValue, (old) => {
-  emit("changed", seletedValue.value);
-});
+watch(
+  selectedValue,
+  (old) => {
+    emit("changed", selectedValue.value);
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -175,7 +183,7 @@ watch(seletedValue, (old) => {
         :is-active="isActive(item.element)"
         v-for="(item, i) in navBarItems"
         :key="i"
-        @click="seletedValue = item.element"
+        @click="selectedValue = item.element"
         :title="item.title"
         :name="item.name"
       />

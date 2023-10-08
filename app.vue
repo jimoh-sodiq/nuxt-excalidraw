@@ -26,7 +26,16 @@ enum EditorMode {
   isMoving = "isMoving",
 }
 
-type ElementTypes = "rectangle" | "line";
+type ElementTypes =
+  | "text"
+  | "eraser"
+  | "pen"
+  | "arrow"
+  | "line"
+  | "picture"
+  | "diamond"
+  | "circle"
+  | "rectangle";
 
 const renderedElements = ref<any>([]);
 const tempElements = ref<any>([]);
@@ -52,11 +61,7 @@ const drawingTools = [
   "rectangle",
 ];
 
-// const startPoint = ref<{ x: number; y: number }>({ x: 0, y: 0 });
-// const selectedShape = ref<ElementTypes>("line");
 const isDrawing = ref(false);
-
-// const mode = ref<EditorMode>(EditorMode.isDrawing);
 
 watchEffect(() => {
   if (!drawingTools.includes(selectedElementType.value)) {
@@ -70,42 +75,39 @@ function createElement(x1: number, y1: number, x2: number, y2: number) {
   let roughElement;
   if (selectedElementType.value == "line") {
     roughElement = generator.value.line(x1, y1, x2, y2);
-    return {
-      x1,
-      y1,
-      x2,
-      y2,
-      roughElement,
-    };
   } else if (selectedElementType.value == "rectangle") {
     roughElement = generator.value.rectangle(x1, y1, x2 - x1, y2 - y1);
-    return {
-      x1,
-      y1,
-      x2,
-      y2,
-      roughElement,
-    };
   } else {
     roughElement = generator.value.circle(
       x1,
       y1,
       calculateDistance(x1, y1, x2, y2)
     );
-    return {
-      x1,
-      y1,
-      x2,
-      y2,
-      roughElement,
-    };
   }
+  return {
+    x1,
+    y1,
+    x2,
+    y2,
+    type: selectedElementType.value,
+    roughElement,
+  };
 }
 
 function handleMouseDown(event: MouseEvent) {
   if (editorMode.value == EditorMode.isDrawing) {
     isDrawing.value = true;
-  } else return;
+  } else {
+    console.log(
+      isWithinElementBoundary(
+        event.clientX,
+        event.clientY,
+        renderedElements.value[0]
+      )
+    );
+    console.log(renderedElements.value[0]);
+    return;
+  }
   const element = createElement(
     event.clientX,
     event.clientY,
@@ -142,10 +144,14 @@ const name = ref("");
 <template>
   <VitePwaManifest />
   <div class="relative text-red-500">
-    <NavBarMain @changed="(val) => (selectedElementType = val)" />
-    <!-- <input type="radio" value="line" v-model="selectedElementType" />
-    <input type="radio" value="rectangle" v-model="selectedElementType" /> -->
+    <NavBarMain
+      :current-selection="selectedElementType"
+      @changed="(val) => (selectedElementType = val)"
+    />
     <canvas
+      :class="
+        editorMode == EditorMode.isDrawing ? 'cursor-cell' : 'cursor-default'
+      "
       class="bg-gray-200"
       @mousemove="handleMouseMove"
       @mousedown="handleMouseDown"
